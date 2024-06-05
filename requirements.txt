@@ -1,5 +1,8 @@
-fastapi
-uvicorn
+tkinter
+tkinter.ttk
+tkinter.filedialog
+tkinter.messagebox
+cx_freeze 
 pytube3
 yt-dlp
 moviepy
