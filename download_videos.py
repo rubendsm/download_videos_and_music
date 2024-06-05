@@ -1,13 +1,12 @@
 import os
 import asyncio
 import yt_dlp
-from moviepy.editor import VideoFileClip, concatenate_videoclips
 
 BASE_OUTPUT_DIR = "./videos/"
 
-async def download_video(url: str, output_dir: str) -> str:
+async def download_video(url: str, output_dir: str, format_choice: str) -> str:
     ydl_opts = {
-        'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'outtmpl': os.path.join(output_dir, '%(title)s' + format_choice),
         'format': 'best'
     }
     try:
@@ -18,27 +17,14 @@ async def download_video(url: str, output_dir: str) -> str:
     except Exception as e:
         raise Exception(f"Failed to download video from {url}: {e}")
 
-async def download_and_merge_videos(meeting_id: str, links: list) -> str:
-    output_dir = os.path.join(BASE_OUTPUT_DIR, meeting_id)
-    output_path = os.path.join(output_dir, 'video.mp4')
 
-    # Create directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-
-    video_files = []
+async def download_videos(links: list, output_dir: str, format_choice: str, progress_callback) -> list:
+    downloaded_files = []
     for link in links:
-        video_file = await download_video(link, output_dir)
-        video_files.append(video_file)
-    
-    clips = [VideoFileClip(video) for video in video_files]
-    final_clip = concatenate_videoclips(clips, method="compose")
-    final_clip.write_videofile(output_path)
-    
-    for clip in clips:
-        clip.close()
-    
-    # Remove the downloaded video files
-    for video_file in video_files:
-        os.remove(video_file)
-    
-    return output_path
+        try:
+            filename = await download_video(link, output_dir, format_choice)
+            downloaded_files.append(filename)
+            progress_callback(len(downloaded_files))  # Atualiza a barra de progresso
+        except Exception as e:
+            print(f"Failed to download video from {link}: {e}")
+    return downloaded_files
