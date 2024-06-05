@@ -4,7 +4,7 @@ Este é uma app que permite fazer downloads de vídeos e musica.
 
 ## Funcionalidades
 
-- Download de vídeos a partir de links fornecidos pelo usuário.
+- Download de vídeos a partir de links fornecidos pelo utlizador
 - Escolha do formato de saída (.mp3 ou .mp4).
 - Escolha do diretório de download.
 - Barra de progresso para acompanhar o progresso do download.
