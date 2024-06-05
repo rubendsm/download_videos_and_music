@@ -1,39 +1,30 @@
 import os
 import asyncio
-from pytube import YouTube
 import yt_dlp
-from moviepy.editor import VideoFileClip, concatenate_videoclips
 
-DOWNLOAD_DIR = "./downloads/"
-OUTPUT_VIDEO = "./output/merged_video.mp4"
+BASE_OUTPUT_DIR = "./videos/"
 
-if not os.path.exists(DOWNLOAD_DIR):
-    os.makedirs(DOWNLOAD_DIR)
-
-if not os.path.exists(os.path.dirname(OUTPUT_VIDEO)):
-    os.makedirs(os.path.dirname(OUTPUT_VIDEO))
-
-async def download_video(url: str, output_dir: str) -> str:
+async def download_video(url: str, output_dir: str, format_choice: str) -> str:
     ydl_opts = {
-        'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'outtmpl': os.path.join(output_dir, '%(title)s' + format_choice),
         'format': 'best'
     }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        filename = ydl.prepare_filename(info)
-    return filename
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info)
+        return filename
+    except Exception as e:
+        raise Exception(f"Failed to download video from {url}: {e}")
 
-async def download_and_merge_videos(links: list) -> str:
-    video_files = []
+
+async def download_videos(links: list, output_dir: str, format_choice: str, progress_callback) -> list:
+    downloaded_files = []
     for link in links:
-        video_file = await download_video(link, DOWNLOAD_DIR)
-        video_files.append(video_file)
-    
-    clips = [VideoFileClip(video) for video in video_files]
-    final_clip = concatenate_videoclips(clips, method="compose")
-    final_clip.write_videofile(OUTPUT_VIDEO)
-    
-    for clip in clips:
-        clip.close()
-    
-    return OUTPUT_VIDEO
+        try:
+            filename = await download_video(link, output_dir, format_choice)
+            downloaded_files.append(filename)
+            progress_callback(len(downloaded_files))  # Atualiza a barra de progresso
+        except Exception as e:
+            print(f"Failed to download video from {link}: {e}")
+    return downloaded_files

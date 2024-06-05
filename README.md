@@ -1,14 +1,38 @@
-# yt_fb_join_and_download
-FastAPI com uma funcionalidade que permita o envio do link de vários vídeos (facebook, youtube,etc) e que faça o download desses videos e faça a junção dos mesmos num só e guarde em um local especifico no servidor. A junção dos vídeos deve ser feita pela ordem de upload dos link , numa lista de links 0 com o 1 depois com o 2 , etc.
+# Video Download Tool
+
+Este é uma app que permite fazer downloads de vídeos e musica.
+
+## Funcionalidades
+
+- Download de vídeos a partir de links fornecidos pelo usuário.
+- Escolha do formato de saída (.mp3 ou .mp4).
+- Escolha do diretório de download.
+- Barra de progresso para acompanhar o progresso do download.
+
+## Requisitos
+
+- Python 3.6 ou superior
+- Bibliotecas Python necessárias:
+  - tkinter
+  - tkinter.ttk
+  - tkinter.filedialog
+  - tkinter.messagebox
+  - asyncio
+  - os
+  - download_videos (módulo para download de vídeos)
+  - youtube_dl (para download de vídeos do YouTube)
+  - moviepy.editor (para manipulação de vídeos)
+  - cx_freze (criar executavel)
 
 
- - pytube para baixar vídeos do YouTube.
- - yt_dlp (sucessor do youtube-dl) para baixar vídeos de outras plataformas como Facebook.
- - moviepy para unir os vídeos.
+## Uso
 
-pip install fastapi uvicorn pytube yt_dlp moviepy
+Execute o script `main.py` para iniciar
 
-main.py define a rota /merge_videos/ que recebe uma lista de links e chama a função download_and_merge_videos.
-download_videos.py contém as funções assíncronas para baixar vídeos e uni-los.
-download_video utiliza yt_dlp para baixar o vídeo de qualquer link fornecido.
-download_and_merge_videos chama download_video para cada link, junta todos os vídeos baixados usando moviepy, e salva o vídeo final no caminho especificado.
+## Criar um executavel .exe
+
+python setup.py build
+
+## Autor
+
+Este projeto foi criado por [rubendsm](https://github.com/rubendsm).
