@@ -2,6 +2,8 @@
 
 Este é uma app que permite fazer downloads de vídeos e musica.
 
+![img](https://github.com/rubendsm/download_videos_and_music/assets/36491036/96177980-c56b-40d9-b072-98586d77780b)
+
 ## Funcionalidades
 
 - Download de vídeos a partir de links fornecidos pelo utlizador
